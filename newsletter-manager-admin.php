@@ -282,7 +282,7 @@ class newsletter_manager_admin
 
 		echo '<div style="margin: .2em 0px;">' . "\n"
 			. '<label for="newsletter__redirect-' . $number . '">'
-				. __('Thank You Page (optional)')
+				. __('Thank You Page Url (optional)')
 				. ':'
 				. '</label>' . '<br />'
 			. '<input type="text"'
