@@ -6,7 +6,7 @@ Description: Lets you readily add a newsletter subscription form to your WordPre
 Author: Denis de Bernardy
 Version: 4.1.1
 Author URI: http://www.getsemiologic.com
-Update Service: http://version.semiologic.com/wordpress
+Update Service: http://version.semiologic.com/plugins
 Update Tag: newsletter_manager
 Update Package: http://www.semiologic.com/media/software/marketing/newsletter-manager/newsletter-manager.zip
 */
