@@ -127,7 +127,7 @@ class newsletter_manager
 				'widget_title' => __('Newsletter'),
 				'widget_teaser' => __('Sign up to receive an occasional newsletter with insider tips, and irresistible offers.'),
 				'thank_you' => __('Thank you for subscribing!'),
-				'your_name' => __('Your Name (leave blank to drop field)'),
+				'your_name' => __('Your Name'),
 				'your_email' => __('Your Email'),
 				'sign_up' => __('Sign Up'),
 				),
