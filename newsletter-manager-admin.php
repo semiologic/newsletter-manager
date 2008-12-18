@@ -163,7 +163,7 @@ class newsletter_manager_admin
 		$captions = array(
 			'widget_title' => __('Widget Title'),
 			'widget_teaser' => __('Widget Teaser'),
-			'your_name' => __('Your Name'),
+			'your_name' => __('Your Name (leave blank to drop field)'),
 			'your_email' => __('Your Email'),
 			'sign_up' => __('Sign Up'),
 			'thank_you' => __('Thank You Message'),

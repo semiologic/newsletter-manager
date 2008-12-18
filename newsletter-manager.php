@@ -4,7 +4,7 @@ Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/marketing/newsletter-manager/
 Description: Lets you readily add a newsletter subscription form to your WordPress installation.
 Author: Denis de Bernardy
-Version: 4.1.1
+Version: 4.2 alpha
 Author URI: http://www.getsemiologic.com
 Update Service: http://version.semiologic.com/plugins
 Update Tag: newsletter_manager
@@ -127,7 +127,7 @@ class newsletter_manager
 				'widget_title' => __('Newsletter'),
 				'widget_teaser' => __('Sign up to receive an occasional newsletter with insider tips, and irresistible offers.'),
 				'thank_you' => __('Thank you for subscribing!'),
-				'your_name' => __('Your Name'),
+				'your_name' => __('Your Name (leave blank to drop field)'),
 				'your_email' => __('Your Email'),
 				'sign_up' => __('Sign Up'),
 				),
@@ -289,14 +289,19 @@ class newsletter_manager
 				. '"'
 				. '>'
 			. '<div class="newsletter_fields">'
-			. '<input type="hidden" name="subscribe2newsletter" value="' . $number . '">'
-			. '<input type="text"'
+			. '<input type="hidden" name="subscribe2newsletter" value="' . $number . '">';
+		
+		if (!empty($captions['your_name']))
+		{
+			$o .= '<input type="text"'
 				. ' id="name_nm' . $id . '" name="name"'
 				. ' value="' . htmlspecialchars($captions['your_name']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\' ) this.value = \'\';"'
 				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\';"'
-				. ' /><br />'
-			. '<input type="text"'
+				. ' /><br />';
+		}
+		
+		$o	.= '<input type="text"'
 				. ' id="email_nm' . $id . '" name="email"'
 				. ' value="' . htmlspecialchars($captions['your_email']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\' ) this.value = \'\';"'
@@ -351,14 +356,19 @@ class newsletter_manager
 						)
 					)
 				 . '" />'
-			. '<div class="newsletter_fields">'
-			. '<input type="text"'
+			. '<div class="newsletter_fields">';
+			
+		if (!empty($captions['your_name']))
+		{
+			$o .= '<input type="text"'
 				. ' id="name_nm' . $id . '" name="name"'
 				. ' value="' . attribute_escape($captions['your_name']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\' ) this.value = \'\';"'
 				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\';"'
-				. ' /><br />'
-			. '<input type="text"'
+				. ' /><br />';
+		}
+		
+		$o	.= '<input type="text"'
 				. ' id="email_nm' . $id . '" name="from"'
 				. ' value="' . htmlspecialchars($captions['your_email']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\' ) this.value = \'\';"'
