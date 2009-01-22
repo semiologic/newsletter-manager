@@ -3,28 +3,6 @@
 class newsletter_manager_admin
 {
 	#
-	# init()
-	#
-
-	function init()
-	{
-		add_filter('sem_api_key_protected', array('newsletter_manager_admin', 'sem_api_key_protected'));
-	} # init()
-	
-		
-	#
-	# sem_api_key_protected()
-	#
-	
-	function sem_api_key_protected($array)
-	{
-		$array[] = 'http://www.semiologic.com/media/software/marketing/newsletter-manager/newsletter-manager.zip';
-		
-		return $array;
-	} # sem_api_key_protected()
-
-
-	#
 	# upgrade_options()
 	#
 
@@ -296,6 +274,4 @@ class newsletter_manager_admin
 			. '</table>';
 	} # widget_control()
 } # newsletter_manager_admin
-
-newsletter_manager_admin::init();
 ?>
