@@ -3,7 +3,7 @@
 Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/marketing/newsletter-manager/
 Description: Lets you readily add a newsletter subscription form to your WordPress installation.
-Version: 4.2.2 alpha
+Version: 4.2.2 RC
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
 */
