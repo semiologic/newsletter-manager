@@ -104,7 +104,7 @@ class newsletter_manager
 	{
 		$o = newsletter_manager::get_options();
 		$k = time();
-		do $k++; while ( isset($o[$k]) );
+		while ( isset($o[$k]) ) $k++;
 		$o[$k] = newsletter_manager::default_options();
 		
 		update_option('newsletter_manager_widgets', $o);
