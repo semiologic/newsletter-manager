@@ -212,7 +212,7 @@ class newsletter_manager_admin
 			. '</td>' . "\n"
 			. '<td>'
 				. '<label for="newsletter__syntax__aweber-' . $number . '">'
-				. __('I am using <a href="http://go.semiologic.com/aweber" target="_blank">aWeber</a>, as recommended in the <a href="http://www.semiologic.com/software/marketing/newsletter-manager/" target="_blank">plugin\'s documentation</a>.')
+				. __('I am using <a href="http://go.semiologic.com/aweber" target="_blank">aWeber</a>, as recommended in the <a href="http://www.semiologic.com/software/newsletter-manager/" target="_blank">plugin\'s documentation</a>.')
 				. '</label>'
 			. '</td>' . "\n"
 			. '</tr>' . "\n"
