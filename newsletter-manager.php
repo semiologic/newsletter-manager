@@ -298,6 +298,7 @@ class newsletter_manager
 				. ' value="' . htmlspecialchars($captions['your_name']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\' ) this.value = \'\';"'
 				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\';"'
+				. ' style="width: 97%;"'
 				. ' /><br />';
 		}
 		
@@ -306,6 +307,7 @@ class newsletter_manager
 				. ' value="' . htmlspecialchars($captions['your_email']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\' ) this.value = \'\';"'
 				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\';"'
+				. ' style="width: 97%;"'
 				. ' />'
 			. '</div>' . "\n"
 			. '<div class="newsletter_submit">'
@@ -365,6 +367,7 @@ class newsletter_manager
 				. ' value="' . attribute_escape($captions['your_name']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\' ) this.value = \'\';"'
 				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\';"'
+				. ' style="width: 97%;"'
 				. ' /><br />';
 		}
 		
@@ -373,6 +376,7 @@ class newsletter_manager
 				. ' value="' . htmlspecialchars($captions['your_email']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\' ) this.value = \'\';"'
 				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\';"'
+				. ' style="width: 97%;"'
 				. ' />'
 			. '</div>' . "\n"
 			. '<div class="newsletter_submit">'
