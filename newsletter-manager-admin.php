@@ -212,7 +212,7 @@ class newsletter_manager_admin
 			. '</td>' . "\n"
 			. '<td>'
 				. '<label for="newsletter__syntax__aweber-' . $number . '">'
-				. __('I am using <a href="http://go.semiologic.com/aweber" target="_blank">aWeber</a>, as recommended in the <a href="http://www.semiologic.com/software/newsletter-manager/" target="_blank">plugin\'s documentation</a>.')
+				. __('I am using <a href="http://go.semiologic.com/aweber" onclick="window.open(this.href); return false;">aWeber</a>, as recommended in the <a href="http://www.semiologic.com/software/newsletter-manager/" onclick="window.open(this.href); return false;">plugin\'s documentation</a>.')
 				. '</label>'
 			. '</td>' . "\n"
 			. '</tr>' . "\n"
@@ -230,7 +230,7 @@ class newsletter_manager_admin
 			. '</td>' . "\n"
 			. '<td>'
 				. '<label for="newsletter__syntax__list-' . $number . '">'
-				. __('My list manager (e.g. <a href="http://go.semiologic.com/1shoppingcart" target="_blank">1ShoppingCart</a>, <a href="http://go.semiologic.com/getresponse" target="_blank">GetResponse</a>) lets users subscribe when they email:') . '<br />'
+				. __('My list manager (e.g. <a href="http://go.semiologic.com/1shoppingcart" onclick="window.open(this.href); return false;">1ShoppingCart</a>, <a href="http://go.semiologic.com/getresponse" onclick="window.open(this.href); return false;">GetResponse</a>) lets users subscribe when they email:') . '<br />'
 				. 'mylist@mydomain.com'
 				. '</label>'
 			. '</td>' . "\n"
@@ -249,7 +249,7 @@ class newsletter_manager_admin
 			. '</td>' . "\n"
 			. '<td>'
 				. '<label for="newsletter__syntax__list_subscribe-' . $number . '">'
-				. __('My list manager (e.g. <a href="http://www.greatcircle.com/majordomo" target="_blank">majordomo</a>) lets users subscribe when they email:') . '<br />'
+				. __('My list manager (e.g. <a href="http://www.greatcircle.com/majordomo" onclick="window.open(this.href); return false;">majordomo</a>) lets users subscribe when they email:') . '<br />'
 				. 'mylist-subscribe@mydomain.com'
 				. '</label>'
 			. '</td>' . "\n"
