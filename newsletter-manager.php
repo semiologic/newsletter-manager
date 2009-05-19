@@ -311,7 +311,7 @@ class newsletter_manager
 				. ' />'
 			. '</div>' . "\n"
 			. '<div class="newsletter_submit">'
-			. '<input type="submit"'
+			. '<input type="submit" class="button submit"'
 				. ' value="' . htmlspecialchars($captions['sign_up']) . '"'
 				. ' onclick="if ( !getElementById(\'email_nm' . $id . '\').value.match(/\S+@\S+/) ) { getElementById(\'email_nm' . $id . '\').focus(); return false; }"'
 				. ' /></div>' . "\n"
@@ -380,7 +380,7 @@ class newsletter_manager
 				. ' />'
 			. '</div>' . "\n"
 			. '<div class="newsletter_submit">'
-			. '<input type="submit"'
+			. '<input type="submit" class="button submit"'
 				. ' value="' . htmlspecialchars($captions['sign_up']) . '"'
 				. ' name="submit"'
 				. ' onclick="if ( !getElementById(\'email_nm' . $id . '\').value.match(/\S+@\S+/) ) { getElementById(\'email_nm' . $id . '\').focus(); return false; }"'
