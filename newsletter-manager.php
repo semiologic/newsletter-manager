@@ -364,7 +364,7 @@ class newsletter_manager
 		{
 			$o .= '<input type="text"'
 				. ' id="name_nm' . $id . '" name="name"'
-				. ' value="' . attribute_escape($captions['your_name']) . '"'
+				. ' value="' . esc_attr($captions['your_name']) . '"'
 				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\' ) this.value = \'\';"'
 				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\';"'
 				. ' style="width: 97%;"'

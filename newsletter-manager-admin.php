@@ -170,7 +170,7 @@ class newsletter_manager_admin
 					. '<input type="text"'
 						. ' style="width: 320px;"'
 						. ' id="newsletter__caption__' . $key . '-' . $number . '" name="widget-newsletter[' . $number . '][captions][' . $key . ']"'
-						. ' value="' . attribute_escape($ops['captions'][$key]) . '"'
+						. ' value="' . esc_attr($ops['captions'][$key]) . '"'
 						. ' />'
 					. '</div>' . "\n";
 				break;
@@ -191,7 +191,7 @@ class newsletter_manager_admin
 			. '<input type="text"'
 				. ' style="width: 320px;"'
 				. ' id="newsletter__email-' . $number . '" name="widget-newsletter[' . $number . '][email]"'
-				. ' value="' . attribute_escape($ops['email']) . '"'
+				. ' value="' . esc_attr($ops['email']) . '"'
 				. ' />'
 			. '</div>' . "\n";
 
@@ -266,7 +266,7 @@ class newsletter_manager_admin
 			. '<input type="text"'
 				. ' style="width: 320px;"'
 				. ' id="newsletter__redirect-' . $number . '" name="widget-newsletter[' . $number . '][redirect]"'
-				. ' value="' . attribute_escape($ops['redirect']) . '"'
+				. ' value="' . esc_attr($ops['redirect']) . '"'
 				. ' />'
 			. '</div>' . "\n";
 
