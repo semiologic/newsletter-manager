@@ -297,24 +297,24 @@ class newsletter_manager
 		{
 			$o .= '<input type="text"'
 				. ' id="name_nm' . $id . '" name="name"'
-				. ' value="' . htmlspecialchars($captions['your_name']) . '"'
-				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\' ) this.value = \'\';"'
-				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\';"'
+				. ' value="' . esc_attr($captions['your_name']) . '"'
+				. ' onfocus="if ( this.value == \'' . addslashes(esc_attr($captions['your_name'])) . '\' ) this.value = \'\';"'
+				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(esc_attr($captions['your_name'])) . '\';"'
 				. ' style="width: 97%;"'
 				. ' /><br />';
 		}
 		
 		$o	.= '<input type="text"'
 				. ' id="email_nm' . $id . '" name="email"'
-				. ' value="' . htmlspecialchars($captions['your_email']) . '"'
-				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\' ) this.value = \'\';"'
-				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\';"'
+				. ' value="' . esc_attr($captions['your_email']) . '"'
+				. ' onfocus="if ( this.value == \'' . addslashes(esc_attr($captions['your_email'])) . '\' ) this.value = \'\';"'
+				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(esc_attr($captions['your_email'])) . '\';"'
 				. ' style="width: 97%;"'
 				. ' />'
 			. '</div>' . "\n"
 			. '<div class="newsletter_submit">'
 			. '<input type="submit" class="button submit"'
-				. ' value="' . htmlspecialchars($captions['sign_up']) . '"'
+				. ' value="' . esc_attr($captions['sign_up']) . '"'
 				. ' onclick="if ( !getElementById(\'email_nm' . $id . '\').value.match(/\S+@\S+/) ) { getElementById(\'email_nm' . $id . '\').focus(); return false; }"'
 				. ' /></div>' . "\n"
 			. '</form>';
@@ -349,7 +349,7 @@ class newsletter_manager
 			. '<input type="hidden" name="meta_required" value="from" />'
 			. '<input type="hidden" name="redirect" value="'
 				. ( $options['redirect']
-					? htmlspecialchars($options['redirect'])
+					? esc_url($options['redirect'])
 					: ( 'http' . ( $_SERVER['HTTPS'] == 'on' ? 's' : '' ) . '://'
 						. $_SERVER['HTTP_HOST']
 						. $_SERVER['REQUEST_URI']
@@ -367,23 +367,23 @@ class newsletter_manager
 			$o .= '<input type="text"'
 				. ' id="name_nm' . $id . '" name="name"'
 				. ' value="' . esc_attr($captions['your_name']) . '"'
-				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\' ) this.value = \'\';"'
-				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_name'])) . '\';"'
+				. ' onfocus="if ( this.value == \'' . addslashes(esc_attr($captions['your_name'])) . '\' ) this.value = \'\';"'
+				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(esc_attr($captions['your_name'])) . '\';"'
 				. ' style="width: 97%;"'
 				. ' /><br />';
 		}
 		
 		$o	.= '<input type="text"'
 				. ' id="email_nm' . $id . '" name="from"'
-				. ' value="' . htmlspecialchars($captions['your_email']) . '"'
-				. ' onfocus="if ( this.value == \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\' ) this.value = \'\';"'
-				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(htmlspecialchars($captions['your_email'])) . '\';"'
+				. ' value="' . esc_attr($captions['your_email']) . '"'
+				. ' onfocus="if ( this.value == \'' . addslashes(esc_attr($captions['your_email'])) . '\' ) this.value = \'\';"'
+				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(esc_attr($captions['your_email'])) . '\';"'
 				. ' style="width: 97%;"'
 				. ' />'
 			. '</div>' . "\n"
 			. '<div class="newsletter_submit">'
 			. '<input type="submit" class="button submit"'
-				. ' value="' . htmlspecialchars($captions['sign_up']) . '"'
+				. ' value="' . esc_attr($captions['sign_up']) . '"'
 				. ' name="submit"'
 				. ' onclick="if ( !getElementById(\'email_nm' . $id . '\').value.match(/\S+@\S+/) ) { getElementById(\'email_nm' . $id . '\').focus(); return false; }"'
 				. ' /></div>' . "\n"
