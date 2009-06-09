@@ -159,7 +159,7 @@ class newsletter_manager_admin
 						. ' style="width: 320px; height: 60px;"'
 						. ' id="newsletter__caption__' . $key . '-' . $number . '" name="widget-newsletter[' . $number . '][captions][' . $key . ']"'
 						. ' >'
-						. format_to_edit($ops['captions'][$key])
+						. esc_html($ops['captions'][$key])
 						. '</textarea>'
 					. '</div>' . "\n";
 				break;
