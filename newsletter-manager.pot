@@ -1,0 +1,92 @@
+# Newsletter Manager pot file.
+# Copyright (C) 2009 Mesoconcepts <http://www.mesoconcepts.com>
+# This file is distributed under the same license as the Newsletter Manager package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 5.0\n"
+"Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
+"POT-Creation-Date: 2009-06-10 19:22+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: newsletter-manager.php:89
+msgid "A newsletter subscription form."
+msgstr ""
+
+#: newsletter-manager.php:95
+msgid "Newsletter Widget"
+msgstr ""
+
+#: newsletter-manager.php:122
+msgid "Your mailing list is not configured."
+msgstr ""
+
+#: newsletter-manager.php:383
+msgid "Title:"
+msgstr ""
+
+#: newsletter-manager.php:394
+msgid "Mailing List, e.g. <code>mylist@aweber.com</code>:"
+msgstr ""
+
+#: newsletter-manager.php:402
+#, php-format
+msgid ""
+"(Works with <a href=\"%1$s\" onclick=\"window.open(this.href); return false;"
+"\">AWeber</a> (recommended), <a href=\"%2$s\" onclick=\"window.open(this."
+"href); return false;\">GetResponse</a> and <a href=\"%3$s\" onclick=\"window."
+"open(this.href); return false;\">1ShoppingCart</a>.)"
+msgstr ""
+
+#: newsletter-manager.php:407
+msgid "Teaser Message:"
+msgstr ""
+
+#: newsletter-manager.php:419
+msgid ""
+"Form Labels (<code>Your Name</code>, <code>Your Email</code>, <code>Sign Up</"
+"code>):"
+msgstr ""
+
+#: newsletter-manager.php:438
+msgid "Privacy Policy:"
+msgstr ""
+
+#: newsletter-manager.php:450
+msgid "Thank You Page URL, e.g. <code>http://domain.com/thank-you/</code>:"
+msgstr ""
+
+#: newsletter-manager.php:461
+msgid "Thank You Message (used if no thank you page is configured):"
+msgstr ""
+
+#: newsletter-manager.php:550
+msgid "Newsletter"
+msgstr ""
+
+#: newsletter-manager.php:553
+msgid ""
+"Sign up to receive an occasional newsletter with insider tips and "
+"irresistible offers."
+msgstr ""
+
+#: newsletter-manager.php:555
+msgid ""
+"Thank you for subscribing! You'll receive a confirmation email in a few "
+"moments."
+msgstr ""
+
+#: newsletter-manager.php:557
+msgid "Your Email"
+msgstr ""
+
+#: newsletter-manager.php:558
+msgid "Sign Up"
+msgstr ""

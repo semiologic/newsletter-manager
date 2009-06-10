@@ -3,7 +3,7 @@
 Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/newsletter-manager/
 Description: Lets you readily add a newsletter subscription form to your WordPress installation.
-Version: 4.3 alpha
+Version: 5.0 RC
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
 Text Domain: newsletter-manager-info
@@ -20,480 +20,544 @@ http://www.mesoconcepts.com/license/
 **/
 
 
-class newsletter_manager
-{
-	#
-	# init()
-	#
+load_plugin_textdomain('newsletter-manager', null, dirname(__FILE__) . '/lang');
 
-	function init()
-	{
-		add_action('init', array('newsletter_manager', 'subscribe_user'));
-		add_action('widgets_init', array('newsletter_manager', 'widgetize'));
-	} # init()
+if ( !defined('sem_newsletter_widget_debug') )
+	define('sem_newsletter_widget_debug', false);
 
 
-	#
-	# get_options()
-	#
+/**
+ * newsletter_manager
+ *
+ * @package Newsletter Manager
+ **/
 
-	function get_options()
-	{
-		if ( ( $o = get_option('newsletter_manager_widgets') ) === false )
-		{
-			if ( ( $o = get_option('sem_newsletter_params') ) !== false
-				)
-			{
-			 	if ( $o['version'] < 3 )
-				{
-					include_once dirname(__FILE__) . '/newsletter-manager-admin.php';
-					$o = newsletter_manager_admin::upgrade_options();
-				}
-				
-				# trigger upgrade
-				unset($o['version']);
-				$o = array( 1 => $o );
-				foreach ( array_keys( $sidebars = get_option('sidebars_widgets') ) as $k )
-				{
-					if ( !is_array($sidebars[$k]) )
-					{
-						continue;
-					}
-					
-					if ( ( $key = array_search('newsletter', $sidebars[$k]) ) !== false )
-					{
-						$sidebars[$k][$key] = 'newsletter_widget-1';
-						update_option('sidebars_widgets', $sidebars);
-						break;
-					}
-					elseif ( ( $key = array_search('Newsletter', $sidebars[$k]) ) !== false )
-					{
-						$sidebars[$k][$key] = 'newsletter_widget-1';
-						update_option('sidebars_widgets', $sidebars);
-						break;
-					}
-				}
-			}
-			else
-			{
-				$o = array();
-			}
-			
-			$o['version'] = '4';
+add_action('widgets_init', array('newsletter_manager', 'widgets_init'));
 
-			update_option('newsletter_manager_widgets', $o);
-			#dump($o);
-		}
-
-		if (isset($o['%i%']) && !isset($o[1]))
-		{
-			$o[1] = $o['%i%'];
-			unset($o['%i%']);
-			update_option('newsletter_manager_widgets', $o);
-		}
-			
-		#dump($o, get_option('sidebars_widgets'));
-		
-		return $o;
-	} # get_options()
-	
-	
-	#
-	# new_widget()
-	#
-	
-	function new_widget()
-	{
-		$o = newsletter_manager::get_options();
-		$k = time();
-		while ( isset($o[$k]) ) $k++;
-		$o[$k] = newsletter_manager::default_options();
-		
-		update_option('newsletter_manager_widgets', $o);
-		
-		return 'newsletter_widget-' . $k;
-	} # new_widget()
-	
-	
-	#
-	# default_options()
-	#
-	
-	function default_options()
-	{
-		return array(
-			'email' => '',
-			'syntax' => 'aweber',
-			'redirect' => '',
-			'captions' => array(
-				'widget_title' => __('Newsletter'),
-				'widget_teaser' => __('Sign up to receive an occasional newsletter with insider tips, and irresistible offers.'),
-				'thank_you' => __('Thank you for subscribing!'),
-				'your_name' => __('Your Name'),
-				'your_email' => __('Your Email'),
-				'sign_up' => __('Sign Up'),
-				),
-			);
-	} # default_options()
-
-
-	#
-	# widgetize()
-	#
-
-	function widgetize()
-	{
-		$options = newsletter_manager::get_options();
-		
-		$widget_options = array('classname' => 'newsletter_widget', 'description' => __( "A mailing list subscription form") );
-		$control_options = array('width' => 700, 'id_base' => 'newsletter_widget');
-		
-		$id = false;
-		
-		# registered widgets
-		foreach ( array_keys($options) as $o )
-		{
-			if ( !is_numeric($o) ) continue;
-			$id = "newsletter_widget-$o";
-			wp_register_sidebar_widget($id, __('Newsletter'), array('newsletter_manager', 'display_widget'), $widget_options, array( 'number' => $o ));
-			wp_register_widget_control($id, __('Newsletter'), array('newsletter_manager_admin', 'widget_control'), $control_options, array( 'number' => $o ) );
-		}
-		
-		# default widget if none were registered
-		if ( !$id )
-		{
-			$id = "newsletter_widget-1";
-			wp_register_sidebar_widget($id, __('Newsletter'), array('newsletter_manager', 'display_widget'), $widget_options, array( 'number' => -1 ));
-			wp_register_widget_control($id, __('Newsletter'), array('newsletter_manager_admin', 'widget_control'), $control_options, array( 'number' => -1 ) );
-		}
-	} # widgetize()
-
-
-	#
-	# check_email()
-	#
-
-	function check_email($email)
-	{
-		return preg_match("/
-			^
-			[0-9a-zA-Z_.-]+
-			@
-			[0-9a-zA-Z_.-]+
-			$
-			/ix",
-			$email
-			);
-	} # check_email()
-
-
-	#
-	# display_widget()
-	#
-
-	function display_widget($args = null, $widget_args = 1)
-	{
-		$options = newsletter_manager::get_options();
-
-		if ( is_numeric($widget_args) )
-			$widget_args = array( 'number' => $widget_args );
-		$widget_args = wp_parse_args( $widget_args, array( 'number' => -1 ) );
-		extract( $widget_args, EXTR_SKIP );
-		
-		$options = $options[$number];
-		
-		if ( is_admin() )
-		{
-			echo $args['before_widget']
-				. $args['before_title']
-				. $options['email']
-				. $args['after_title']
-				. $args['after_widget'];
-
-			return;
-		}
-
-		# default args
-		$defaults = array(
-			'before_widget' => '',
-			'after_widget' => '',
-			'before_title' => '<h2>',
-			'after_title' => '</h2>',
-			'title' => $options['captions']['widget_title'],
-			'teaser' => $options['captions']['widget_teaser'],
-			'thank_you' => $options['captions']['thank_you'],
-			);
-
-		$args = array_merge($defaults, (array) $args);
-
-		echo $args['before_widget'] . "\n";
-
-		echo $args['title'] ? ( $args['before_title'] . $args['title'] . $args['after_title'] . "\n" ) : '';
-
-		if ( !isset($_GET['subscribed']) )
-		{
-			echo $args['teaser'] ? ( '<div class="teaser">' . wpautop($args['teaser']) . '</div>' . "\n" ) : '';
-		}
-
-		echo newsletter_manager::get_form($number);
-
-		echo $args['after_widget'] . "\n";
-	} # display_widget()
-
-
-	#
-	# get_form()
-	#
-
-	function get_form($number)
-	{
-		$options = newsletter_manager::get_options();
-		$options = $options[$number];
-
-		if ( isset($_GET['subscribed']) )
-		{
-			return wpautop($options['captions']['thank_you']);
-		}
-		elseif ( !newsletter_manager::check_email($options['email']) )
-		{
-			return '<div style="border: solid 2px firebrick; padding: 5px; background-color: AntiqueWhite; color: firebrick; font-weight: bold;">'
-				. __('Your mailing list is not configured.')
-				. '</div>' . "\n";
-		}
-
-		switch ( $options['syntax'] )
-		{
-		case 'aweber':
-			return newsletter_manager::aweber_form($number);
-			break;
-
-		default:
-			return newsletter_manager::default_form($number);
-			break;
-		}
-	} # get_form()
-
-
-	#
-	# default_form()
-	#
-
-	function default_form($number)
-	{
-		$id =& $number;
-
-		$options = newsletter_manager::get_options();
-		$options = $options[$number];
-		$captions =& $options['captions'];
-
-		$o = '<form method="post" action="'
-					. $_SERVER['REQUEST_URI']
-				. '"'
-				. '>'
-			. '<div class="newsletter_fields">'
-			. '<input type="hidden" name="subscribe2newsletter" value="' . $number . '">';
-		
-		if (!empty($captions['your_name']))
-		{
-			$o .= '<input type="text"'
-				. ' id="name_nm' . $id . '" name="name"'
-				. ' value="' . esc_attr($captions['your_name']) . '"'
-				. ' onfocus="if ( this.value == \'' . addslashes(esc_attr($captions['your_name'])) . '\' ) this.value = \'\';"'
-				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(esc_attr($captions['your_name'])) . '\';"'
-				. ' style="width: 97%;"'
-				. ' /><br />';
-		}
-		
-		$o	.= '<input type="text"'
-				. ' id="email_nm' . $id . '" name="email"'
-				. ' value="' . esc_attr($captions['your_email']) . '"'
-				. ' onfocus="if ( this.value == \'' . addslashes(esc_attr($captions['your_email'])) . '\' ) this.value = \'\';"'
-				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(esc_attr($captions['your_email'])) . '\';"'
-				. ' style="width: 97%;"'
-				. ' />'
-			. '</div>' . "\n"
-			. '<div class="newsletter_submit">'
-			. '<input type="submit" class="button submit"'
-				. ' value="' . esc_attr($captions['sign_up']) . '"'
-				. ' onclick="if ( !getElementById(\'email_nm' . $id . '\').value.match(/\S+@\S+/) ) { getElementById(\'email_nm' . $id . '\').focus(); return false; }"'
-				. ' /></div>' . "\n"
-			. '</form>';
-
-		return $o;
-	} # default_form()
-
-
-	#
-	# aweber_form()
-	#
-
-	function aweber_form($number)
-	{
-		$id =& $number;
-
-		$options = newsletter_manager::get_options();
-		$options = $options[$number];
-		$captions =& $options['captions'];
-
-		$unit = $options['email'];
-
-		if ( strpos($unit, '@aweber.com') !== false )
-		{
-			$unit = preg_replace("/@.+/", "", $unit);
-		}
-
-		$o = $options['teaser']
-			. '<form method="post" action="http://www.aweber.com/scripts/addlead.pl">'
-			. '<input type="hidden" name="unit" value="' . $unit . '" />'
-			. '<input type="hidden" name="meta_message" value="1" />'
-			. '<input type="hidden" name="meta_required" value="from" />'
-			. '<input type="hidden" name="redirect" value="'
-				. ( $options['redirect']
-					? esc_url($options['redirect'])
-					: ( 'http' . ( $_SERVER['HTTPS'] == 'on' ? 's' : '' ) . '://'
-						. $_SERVER['HTTP_HOST']
-						. $_SERVER['REQUEST_URI']
-						. ( ( strpos($_SERVER['REQUEST_URI'], '?') !== false )
-							? '&'
-							: '?'
-							) . 'subscribed=' . $number
-						)
-					)
-				 . '" />'
-			. '<div class="newsletter_fields">';
-			
-		if (!empty($captions['your_name']))
-		{
-			$o .= '<input type="text"'
-				. ' id="name_nm' . $id . '" name="name"'
-				. ' value="' . esc_attr($captions['your_name']) . '"'
-				. ' onfocus="if ( this.value == \'' . addslashes(esc_attr($captions['your_name'])) . '\' ) this.value = \'\';"'
-				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(esc_attr($captions['your_name'])) . '\';"'
-				. ' style="width: 97%;"'
-				. ' /><br />';
-		}
-		
-		$o	.= '<input type="text"'
-				. ' id="email_nm' . $id . '" name="from"'
-				. ' value="' . esc_attr($captions['your_email']) . '"'
-				. ' onfocus="if ( this.value == \'' . addslashes(esc_attr($captions['your_email'])) . '\' ) this.value = \'\';"'
-				. ' onblur="if ( this.value == \'\' ) this.value = \'' . addslashes(esc_attr($captions['your_email'])) . '\';"'
-				. ' style="width: 97%;"'
-				. ' />'
-			. '</div>' . "\n"
-			. '<div class="newsletter_submit">'
-			. '<input type="submit" class="button submit"'
-				. ' value="' . esc_attr($captions['sign_up']) . '"'
-				. ' name="submit"'
-				. ' onclick="if ( !getElementById(\'email_nm' . $id . '\').value.match(/\S+@\S+/) ) { getElementById(\'email_nm' . $id . '\').focus(); return false; }"'
-				. ' /></div>' . "\n"
-			. '</form>';
-
-		return $o;
-	} # aweber_form()
-
-
-	#
-	# subscribe_user()
-	#
-
-	function subscribe_user()
-	{
-		$options = newsletter_manager::get_options();
-
-		if ( @ $_POST['subscribe2newsletter']
-		 	&& is_numeric($_POST['subscribe2newsletter'])
-		)
-		{
-			$options = $options[$_POST['subscribe2newsletter']];
-			
-			if ( newsletter_manager::check_email($options['email'])
-				&& newsletter_manager::check_email($_POST['email'])
-				)
-			{
-				$to = $options['email'];
-
-				if ( $options['syntax'] == 'list-subscribe' )
-				{
-					$to = str_replace('@', '-subscribe@', $to);
-				}
-
-				$name = trim($_POST['name']);
-				$email = $_POST['email'];
-
-				$name = preg_replace("/[^\w ]+/", " ", $name);
-
-				if ( !$name
-					|| $name == $options['captions']['your_name']
-					)
-				{
-					$name = $email;
-				}
-
-				$from = $name ? ( '"' . $name . '" <' . $email . ">" ) : $email;
-
-				$headers = "From: $from";
-
-				$title = 'subscribe';
-				$message = 'subscribe';
-
-				#var_dump(
-				wp_mail(
-					$to,
-					$title,
-					$message,
-					$headers
-					);
-
-				if ( $options['redirect'] != '' )
-				{
-					wp_redirect(
-						$options['redirect']
-							. ( ( strpos($_SERVER['REQUEST_URI'], '?') !== false )
-							? '&'
-							: '?'
-							) . 'subscribed=' . $_POST['subscribe2newsletter']
-						);
-				}
-				else
-				{
-					wp_redirect(
-						$_SERVER['REQUEST_URI']
-						. ( ( strpos($_SERVER['REQUEST_URI'], '?') !== false )
-							? '&'
-							: '?'
-							) . 'subscribed=' . $_POST['subscribe2newsletter']
-						);
-				}
-				
-				die;
-			}
-		}
-	} # subscribe_user()
-} # newsletter_manager
-
-newsletter_manager::init();
-
-
-if ( is_admin() )
-{
-	include dirname(__FILE__) . '/newsletter-manager-admin.php';
+if ( !is_admin() ) {
+	add_action('wp_print_styles', array('newsletter_manager', 'styles'), 0);
+	add_action('wp_print_scripts', array('newsletter_manager', 'scripts'), 0);
 }
 
+add_action('init', array('newsletter_manager', 'subscribe'));
 
+class newsletter_manager extends WP_Widget {
+	/**
+	 * styles()
+	 *
+	 * @return void
+	 **/
 
-########################
-#
-# backward compatibility
-#
+	function styles() {
+		$folder = plugin_dir_url(__FILE__);
+		wp_enqueue_style('newsletter_manager', $folder . 'css/styles.css', null, '5.0');
+	} # styles()
+	
+	
+	/**
+	 * scripts()
+	 *
+	 * @return void
+	 **/
 
-function the_subscribe_form($args = null)
-{
-	echo '<strong>Obsolete function called: the_subscribe_form';
-} # end the_subscribe_form()
+	function scripts() {
+		$folder = plugin_dir_url(__FILE__);
+		wp_enqueue_script('newsletter_manager', $folder . 'js/scripts.js', array('jquery'), '5.0');
+	} # scripts()
+	
+	
+	/**
+	 * widgets_init()
+	 *
+	 * @return void
+	 **/
 
-function newsletter_form()
-{
-	echo '<strong>Obsolete function called</strong>: newsletter_form';
-} // end newsletter_form()
+	function widgets_init() {
+		register_widget('newsletter_manager');
+	} # widgets_init()
+	
+	
+	/**
+	 * newsletter_manager()
+	 *
+	 * @return void
+	 **/
+
+	function newsletter_manager() {
+		$widget_ops = array(
+			'classname' => 'newsletter_widget',
+			'description' => __('A newsletter subscription form.', 'newsletter-manager'),
+			);
+		$control_ops = array(
+			'width' => 430,
+			);
+		
+		$this->WP_Widget('newsletter_widget', __('Newsletter Widget', 'newsletter-manager'), $widget_ops, $control_ops);
+	} # newsletter_manager()
+	
+	
+	/**
+	 * widget()
+	 *
+	 * @param array $args widget args
+	 * @param array $instance widget options
+	 * @return void
+	 **/
+
+	function widget($args, $instance) {
+		extract($args, EXTR_SKIP);
+		$instance = wp_parse_args($instance, newsletter_manager::defaults());
+		extract($instance, EXTR_SKIP);
+		
+		if ( is_admin() )
+			return;
+		
+		echo $before_widget;
+		
+		if ( $title )
+			echo $before_title . $title . $after_title;
+		
+		if ( !is_email($email) ) {
+			echo '<div style="border: solid 2px firebrick; padding: 5px; background-color: AntiqueWhite; color: firebrick; font-weight: bold;">'
+				. __('Your mailing list is not configured.', 'newsletter-manager')
+				. '</div>' . "\n";
+		} elseif ( isset($_GET['subscribed']) && $_GET['subscribed'] == intval(end(explode('-', $widget_id))) ) {
+			echo apply_filters('widget_text', wpautop($thank_you));
+		} else {
+			if ( $syntax == 'aweber' )
+				echo newsletter_manager::get_aweber_form($args, $instance);
+			else
+				echo newsletter_manager::get_default_form($args, $instance);
+		}
+		
+		echo $after_widget . "\n";
+	} # widget()
+	
+	
+	/**
+	 * get_aweber_form()
+	 *
+	 * @param array $args
+	 * @param array $instance
+	 * @return string form
+	 **/
+
+	function get_aweber_form($args, $instance) {
+		extract($args, EXTR_SKIP);
+		extract($instance, EXTR_SKIP);
+		
+		if ( $your_name ) {
+			$your_name = esc_attr($your_name);
+			$name_field = <<<EOS
+<input type="text" class="name" name="name" value="$your_name" title="$your_name" /><br />
+EOS;
+		} else {
+			$name_field = '';
+		}
+		
+		$your_email = esc_attr($your_email);
+		$email_field = <<<EOS
+<input type="text" class="from" name="from" value="$your_email" title="$your_email" />
+EOS;
+		
+		$sign_up = esc_attr($sign_up);
+		$sign_up_field = <<<EOS
+<input type="submit" class="button submit" name="submit" value="$sign_up" />
+EOS;
+		
+		if ( $teaser ) {
+			$teaser = '<div class="newsletter_teaser">'
+				. apply_filters('widget_text', wpautop($teaser))
+				. '</div>';
+		}
+		
+		if ( $policy ) {
+			$policy = '<div class="newsletter_policy">'
+				. apply_filters('widget_text', wpautop($policy))
+				. '</div>';
+		}
+		
+		if ( $name_field || preg_match("/\bsidebar\b/", $id) && !preg_match("/\b(?:top|bottom|wide)\b/", $id) ) {
+			$fields = <<<EOS
+<p class="newsletter_fields newsletter_block">
+$name_field
+$email_field
+</p>
+<p class="newsletter_submit">
+$sign_up_field
+</p>
+EOS;
+		} else {
+			$fields = <<<EOS
+<p class="newsletter_fields newsletter_inline">
+$email_field$sign_up_field
+</p>
+EOS;
+		}
+		
+		$unit = explode('@', $email);
+		$unit = esc_attr($unit[0]);
+		
+		if ( !$redirect ) {
+			$redirect = ( is_ssl() ? 'https://' : 'http://' )
+				. $_SERVER['HTTP_HOST']
+				. $_SERVER['REQUEST_URI'];
+			$redirect = rtrim($redirect, '?&');
+			if ( strpos($redirect, '?') !== false ) {
+				$redirect = preg_replace("/(\?.*)subscribed=\d*&?/i", "$1", $redirect);
+				$redirect = rtrim($redirect, '?&') . '&';
+			} else {
+				$redirect .= '?';
+			}
+			$redirect .= 'subscribed=' . intval(end(explode('-', $widget_id)));
+		}
+		
+		$redirect = esc_url($redirect);
+		
+		return <<<EOS
+<form class="newsletter_manager" method="post" action="http://www.aweber.com/scripts/addlead.pl">
+<input type="hidden" name="unit" value="$unit" />
+<input type="hidden" name="meta_message" value="1" />
+<input type="hidden" name="meta_required" value="from" />
+<input type="hidden" name="redirect" value="$redirect" />
+$teaser
+$fields
+$policy
+</form>
+EOS;
+	} # get_aweber_form()
+	
+	
+	/**
+	 * get_default_form()
+	 *
+	 * @param string $widget_id
+	 * @param array $instance
+	 * @return string form
+	 **/
+
+	function get_default_form($args, $instance) {
+		extract($args, EXTR_SKIP);
+		extract($instance, EXTR_SKIP);
+		
+		if ( $your_name ) {
+			$your_name = esc_attr($your_name);
+			$name_field = <<<EOS
+<input type="text" class="name" name="name" value="$your_name" title="$your_name" /><br />
+EOS;
+		} else {
+			$name_field = '';
+		}
+		
+		$your_email = esc_attr($your_email);
+		$email_field = <<<EOS
+<input type="text" class="from" name="from" value="$your_email" title="$your_email" />
+EOS;
+		
+		$sign_up = esc_attr($sign_up);
+		$sign_up_field = <<<EOS
+<input type="submit" class="button submit" name="submit" value="$sign_up" />
+EOS;
+		
+		if ( $teaser ) {
+			$teaser = '<div class="newsletter_teaser">'
+				. apply_filters('widget_text', wpautop($teaser))
+				. '</div>';
+		}
+		
+		if ( $policy ) {
+			$policy = '<div class="newsletter_policy">'
+				. apply_filters('widget_text', wpautop($policy))
+				. '</div>';
+		}
+		
+		
+		if ( $name_field || preg_match("/\bsidebar\b/", $id) && !preg_match("/\b(?:top|bottom|wide)\b/i", $id) ) {
+			$fields = <<<EOS
+<p class="newsletter_fields newsletter_block">
+$name_field
+$email_field
+</p>
+<p class="newsletter_submit">
+$sign_up_field
+</p>
+EOS;
+		} else {
+			$fields = <<<EOS
+<p class="newsletter_fields newsletter_inline">
+$email_field$sign_up_field
+</p>
+EOS;
+		}
+		
+		$unit = intval(end(explode('-', $widget_id)));
+		
+		$action = ( is_ssl() ? 'https://' : 'http://' )
+			. $_SERVER['HTTP_HOST']
+			. $_SERVER['REQUEST_URI'];
+		$action = rtrim($action, '?&');
+		if ( strpos($action, '?') !== false ) {
+			$action = preg_replace("/(\?.*)subscribed=\d*&?/i", "$1", $action);
+			$action = rtrim($action, '?&');
+		}
+		
+		$action = esc_url($action);
+		
+		return <<<EOS
+<form class="newsletter_manager" method="post" action="$action">
+<input type="hidden" name="newsletter_widget" value="$unit" />
+$teaser
+$fields
+$policy
+</form>
+EOS;
+	} # get_default_form()
+	
+	
+	/**
+	 * update()
+	 *
+	 * @param array $new_instance
+	 * @param array $old_instance
+	 * @return array $instance
+	 **/
+
+	function update($new_instance, $old_instance) {
+		$instance = array();
+		$instance['title'] = strip_tags($new_instance['title']);
+		$instance['email'] = is_email($new_instance['email'])
+			? $new_instance['email']
+			: '';
+		$instance['redirect'] = $new_instance['redirect']
+			? esc_url_raw($new_instance['redirect'])
+			: '';
+		$instance['teaser'] = current_user_can('unfiltered_html')
+			? $new_instance['teaser']
+			: $old_instance['teaser'];
+		$instance['policy'] = current_user_can('unfiltered_html')
+			? $new_instance['policy']
+			: $old_instance['policy'];
+		$instance['thank_you'] = current_user_can('unfiltered_html')
+			? $new_instance['thank_you']
+			: $old_instance['thank_you'];
+		$instance['your_name'] = strip_tags($new_instance['your_name']);
+		$instance['your_email'] = strip_tags($new_instance['your_email']);
+		$instance['sign_up'] = strip_tags($new_instance['sign_up']);
+		
+		$defaults = newsletter_manager::defaults();
+		if ( !$instance['your_email'] )
+			$instance['your_email'] = $defaults['your_email'];
+		if ( !$instance['sign_up'] )
+			$instance['sign_up'] = $defaults['sign_up'];
+		if ( !$instance['redirect'] && !$instance['thank_you'] )
+			$instance['thank_you'] = $defaults['thank_you'];
+		
+		if ( $instance['email'] ) {
+			if ( preg_match("/@aweber\.com$/i", $instance['email']) )
+				$instance['syntax'] = 'aweber';
+			elseif ( preg_match("/@(?:getresponse|1shoppingcart)\.com$/") )
+				$instance['syntax'] = 'list';
+			else
+				$instance['syntax'] = 'list-subscribe';
+		} else {
+			$instance['syntax'] = false;
+		}
+		
+		return $instance;
+	} # update()
+	
+	
+	/**
+	 * form()
+	 *
+	 * @param $instance
+	 * @return void
+	 **/
+
+	function form($instance) {
+		$instance = wp_parse_args($instance, newsletter_manager::defaults());
+		extract($instance, EXTR_SKIP);
+		
+		echo '<p>'
+			. '<label>'
+			. __('Title:', 'newsletter-manager')
+			. '<br />' . "\n"
+			. '<input type="text" class="widefat"'
+				. ' id="' . $this->get_field_id('title') . '"'
+				. ' name="' . $this->get_field_name('title') . '"'
+				. ' value="' . esc_attr($title) . '"'
+				. ' />'
+			. '</label>'
+			. '</p>' . "\n";
+		
+		echo '<p>'
+			. '<label>'
+			. __('Mailing List, e.g. <code>mylist@aweber.com</code>:', 'newsletter-manager')
+			. '<br />' . "\n"
+			. '<input type="text" class="widefat"'
+				. ' name="' . $this->get_field_name('email') . '"'
+				. ' value="' . esc_attr($email) . '"'
+				. ' />'
+			. '</label>'
+			. '<br />' . "\n"
+			. sprintf(__('(Works with <a href="%1$s" onclick="window.open(this.href); return false;">AWeber</a> (recommended), <a href="%2$s" onclick="window.open(this.href); return false;">GetResponse</a> and <a href="%3$s" onclick="window.open(this.href); return false;">1ShoppingCart</a>.)', 'newsletter-manager'), 'http://go.semiologic.com/aweber', 'http://go.semiologic.com/getresponse', 'http://go.semiologic.com/1shoppingcart')
+			. '</p>' . "\n";
+		
+		echo '<p>'
+			. '<label for="' . $this->get_field_id('teaser') . '">'
+			. __('Teaser Message:', 'newsletter-manager')
+			. '</label>'
+			. '<br />' . "\n"
+			. '<textarea class="widefat" rows="2" id="' . $this->get_field_id('teaser') . '"'
+				. ' name="' . $this->get_field_name('teaser') . '"'
+				. ' >'
+				. esc_html($teaser)
+			. '</textarea>'
+			. '</p>' . "\n";
+		
+		echo '<p>'
+			. '<label for="' . $this->get_field_id('your_name') . '">'
+			. __('Form Labels (<code>Your Name</code>, <code>Your Email</code>, <code>Sign Up</code>):', 'newsletter-manager')
+			. '</label>'
+			. '<br />' . "\n"
+			. '<input type="text" class="widefat" style="width: 33.33%;"'
+				. ' name="' . $this->get_field_name('your_name') . '"'
+				. ' value="' . esc_attr($your_name) . '"'
+				. ' />'
+			. '<input type="text" class="widefat" style="width: 33.33%;"'
+				. ' name="' . $this->get_field_name('your_email') . '"'
+				. ' value="' . esc_attr($your_email) . '"'
+				. ' />'
+			. '<input type="text" class="widefat" style="width: 33.34%;"'
+				. ' name="' . $this->get_field_name('sign_up') . '"'
+				. ' value="' . esc_attr($sign_up) . '"'
+				. ' />'
+			. '</p>' . "\n";
+		
+		echo '<p>'
+			. '<label for="' . $this->get_field_id('policy') . '">'
+			. __('Privacy Policy:', 'newsletter-manager')
+			. '</label>'
+			. '<br />' . "\n"
+			. '<textarea class="widefat" rows="2" id="' . $this->get_field_id('policy') . '"'
+				. ' name="' . $this->get_field_name('policy') . '"'
+				. ' >'
+				. esc_html($policy)
+			. '</textarea>'
+			. '</p>' . "\n";
+		
+		echo '<p>'
+			. '<label>'
+			. __('Thank You Page URL, e.g. <code>http://domain.com/thank-you/</code>:', 'newsletter-manager')
+			. '<br />' . "\n"
+			. '<input type="text" class="widefat"'
+				. ' name="' . $this->get_field_name('redirect') . '"'
+				. ' value="' . esc_attr($redirect) . '"'
+				. ' />'
+			. '</label>'
+			. '</p>' . "\n";
+		
+		echo '<p>'
+			. '<label for="' . $this->get_field_id('thank_you') . '">'
+			. __('Thank You Message (used if no thank you page is configured):', 'newsletter-manager')
+			. '</label>'
+			. '<br />' . "\n"
+			. '<textarea class="widefat" rows="2" id="' . $this->get_field_id('thank_you') . '"'
+				. ' name="' . $this->get_field_name('thank_you') . '"'
+				. ' >'
+				. esc_html($thank_you)
+			. '</textarea>'
+			. '</p>' . "\n";
+	} # form()
+	
+	
+	/**
+	 * subscribe()
+	 *
+	 * @return void
+	 **/
+
+	function subscribe() {
+		if ( !$_POST || !isset($_POST['newsletter_widget']) )
+			return;
+		
+		$num = (int) $_POST['newsletter_widget'];
+		$ops = get_option('widget_newsletter_widget');
+		
+		if ( !isset($ops[$num]) )
+			return;
+		
+		extract($ops[$num], EXTR_SKIP);
+		
+		$name = '';
+		$from = $_POST['from'];
+		
+		if ( !is_email($email) || !is_email($from) )
+			return;
+		
+		if ( !empty($_POST['name']) ) {
+			$name = strip_tags(stripslashes($_POST['name']));
+			$name = preg_replace("/[^\w ]+/", " ", $name);
+		}
+		
+		$to = ( $syntax == 'list-subscribe' )
+			? str_replace('@', '-subscribe@', $email)
+			: $email;
+		
+		if ( $name ) {
+			$headers = 'From: "' . $name . '" <' . $from . '>';
+		} else {
+			$headers = 'From: ' . $from;
+		}
+		
+		$title = 'subscribe';
+		$message = 'subscribe';
+		
+		if ( !$redirect ) {
+			$redirect = ( is_ssl() ? 'https://' : 'http://' )
+				. $_SERVER['HTTP_HOST']
+				. $_SERVER['REQUEST_URI'];
+		}
+		
+		$redirect = rtrim($redirect, '?&');
+		if ( strpos($redirect, '?') !== false ) {
+			$redirect = preg_replace("/(\?.*)subscribed=\d*&?/i", "$1", $redirect);
+			$redirect = rtrim($redirect, '?&') . '&';
+		} else {
+			$redirect .= '?';
+		}
+		$redirect .= 'subscribed=' . $num;
+		
+		if ( !sem_newsletter_widget_debug ) {
+			wp_mail($to, $title, $message, $headers);
+			wp_redirect($redirect);
+		} else {
+			$redirect = '<a href="' . esc_url($redirect) . '">' . $redirect . '</a>';
+			dump($to, $title, $message, $headers, $redirect);
+		}
+		
+		die;
+	} # subscribe()
+	
+	
+	/**
+	 * defaults()
+	 *
+	 * @return array $options
+	 **/
+
+	function defaults() {
+		return array(
+			'title' => __('Newsletter', 'newsletter-manager'),
+			'email' => '',
+			'redirect' => '',
+			'teaser' => __('Sign up to receive an occasional newsletter with insider tips and irresistible offers.', 'newsletter-manager'),
+			'policy' => '',
+			'thank_you' => __('Thank you for subscribing! You\'ll receive a confirmation email in a few moments.', 'newsletter-manager'),
+			'your_name' => '',
+			'your_email' => __('Your Email', 'newsletter-manager'),
+			'sign_up' => __('Sign Up', 'newsletter-manager'),
+			);
+	} # defaults()
+} # newsletter_manager
 ?>
