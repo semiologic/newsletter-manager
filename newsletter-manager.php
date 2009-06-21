@@ -109,8 +109,15 @@ class newsletter_manager extends WP_Widget {
 		$instance = wp_parse_args($instance, newsletter_manager::defaults());
 		extract($instance, EXTR_SKIP);
 		
-		if ( is_admin() )
+		if ( is_admin() ) {
+			echo $before_widget
+				. ( $email
+					? ( $before_title . $email . $after_title )
+					: ''
+					)
+				. $after_widget;
 			return;
+		}
 		
 		echo $before_widget;
 		
