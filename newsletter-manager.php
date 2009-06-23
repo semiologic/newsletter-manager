@@ -6,7 +6,7 @@ Description: Lets you readily add a newsletter subscription form to your WordPre
 Version: 5.0 RC
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
-Text Domain: newsletter-manager-info
+Text Domain: newsletter-manager
 Domain Path: /lang
 */
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0\n"
 "Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
-"POT-Creation-Date: 2009-06-10 19:22+0200\n"
+"POT-Creation-Date: 2009-06-23 17:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,19 +24,19 @@ msgstr ""
 msgid "Newsletter Widget"
 msgstr ""
 
-#: newsletter-manager.php:122
+#: newsletter-manager.php:129
 msgid "Your mailing list is not configured."
 msgstr ""
 
-#: newsletter-manager.php:383
+#: newsletter-manager.php:390
 msgid "Title:"
 msgstr ""
 
-#: newsletter-manager.php:394
+#: newsletter-manager.php:402
 msgid "Mailing List, e.g. <code>mylist@aweber.com</code>:"
 msgstr ""
 
-#: newsletter-manager.php:402
+#: newsletter-manager.php:410
 #, php-format
 msgid ""
 "(Works with <a href=\"%1$s\" onclick=\"window.open(this.href); return false;"
@@ -45,48 +45,48 @@ msgid ""
 "open(this.href); return false;\">1ShoppingCart</a>.)"
 msgstr ""
 
-#: newsletter-manager.php:407
+#: newsletter-manager.php:415
 msgid "Teaser Message:"
 msgstr ""
 
-#: newsletter-manager.php:419
+#: newsletter-manager.php:427
 msgid ""
 "Form Labels (<code>Your Name</code>, <code>Your Email</code>, <code>Sign Up</"
 "code>):"
 msgstr ""
 
-#: newsletter-manager.php:438
+#: newsletter-manager.php:446
 msgid "Privacy Policy:"
 msgstr ""
 
-#: newsletter-manager.php:450
+#: newsletter-manager.php:458
 msgid "Thank You Page URL, e.g. <code>http://domain.com/thank-you/</code>:"
 msgstr ""
 
-#: newsletter-manager.php:461
+#: newsletter-manager.php:469
 msgid "Thank You Message (used if no thank you page is configured):"
 msgstr ""
 
-#: newsletter-manager.php:550
+#: newsletter-manager.php:558
 msgid "Newsletter"
 msgstr ""
 
-#: newsletter-manager.php:553
+#: newsletter-manager.php:561
 msgid ""
 "Sign up to receive an occasional newsletter with insider tips and "
 "irresistible offers."
 msgstr ""
 
-#: newsletter-manager.php:555
+#: newsletter-manager.php:563
 msgid ""
 "Thank you for subscribing! You'll receive a confirmation email in a few "
 "moments."
 msgstr ""
 
-#: newsletter-manager.php:557
+#: newsletter-manager.php:565
 msgid "Your Email"
 msgstr ""
 
-#: newsletter-manager.php:558
+#: newsletter-manager.php:566
 msgid "Sign Up"
 msgstr ""
