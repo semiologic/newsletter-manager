@@ -122,7 +122,7 @@ class newsletter_manager extends WP_Widget {
 		echo $before_widget;
 		
 		if ( $title )
-			echo $before_title . $title . $after_title;
+			echo $before_title . apply_filters('widget_title', $title) . $after_title;
 		
 		if ( !is_email($email) ) {
 			echo '<div style="border: solid 2px firebrick; padding: 5px; background-color: AntiqueWhite; color: firebrick; font-weight: bold;">'
