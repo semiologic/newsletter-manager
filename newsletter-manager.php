@@ -618,7 +618,6 @@ EOS;
 				);
 			if ( isset($widget_contexts['newsletter_widget-' . $k]) ) {
 				$ops[$k]['widget_contexts'] = $widget_contexts['newsletter_widget-' . $k];
-				unset($widget_contexts['newsletter_widget-' . $k]);
 			}
 		}
 		
