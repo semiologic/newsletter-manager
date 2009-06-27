@@ -92,6 +92,18 @@ class newsletter_manager extends WP_Widget {
 			'width' => 430,
 			);
 		
+		if ( get_option('widget_newsletter_widget') === false ) {
+			foreach ( array(
+				'newsletter_manager_widgets' => 'upgrade',
+				) as $ops => $method ) {
+				if ( get_option($ops) !== false ) {
+					$this->alt_option_name = $ops;
+					add_filter('option_' . $ops, array('newsletter_manager', $method));
+					break;
+				}
+			}
+		}
+		
 		$this->WP_Widget('newsletter_widget', __('Newsletter Widget', 'newsletter-manager'), $widget_ops, $control_ops);
 	} # newsletter_manager()
 	
@@ -566,5 +578,45 @@ EOS;
 			'sign_up' => __('Sign Up', 'newsletter-manager'),
 			);
 	} # defaults()
+	
+	
+	/**
+	 * upgrade()
+	 *
+	 * @param array $ops
+	 * @return array $ops
+	 **/
+
+	function upgrade($ops) {
+		$widget_contexts = class_exists('widget_contexts')
+			? get_option('widget_contexts')
+			: false;
+		
+		unset($o['%i%']);
+		unset($ops['version']);
+		
+		foreach ( $ops as $k => $o ) {
+			$ops[$k] = array(
+				'title' => $o['captions']['widget_title'],
+				'email' => $o['email'],
+				'syntax' => $o['syntax'],
+				'redirect' => $o['redirect'],
+				'teaser' => $o['captions']['widget_teaser'],
+				'your_name' => $o['captions']['your_name'],
+				'your_email' => $o['captions']['your_email'],
+				'sign_up' => $o['captions']['sign_up'],
+				);
+			if ( isset($widget_contexts['newsletter_widget-' . $k]) ) {
+				$ops[$k]['widget_contexts'] = $widget_contexts['newsletter_widget-' . $k];
+				unset($widget_contexts['newsletter_widget-' . $k]);
+			}
+		}
+		
+		update_option('widget_newsletter_widget', $ops);
+		if ( $widget_contexts !== false )
+			update_option('widget_contexts', $widget_contexts);
+		
+		return $ops;
+	} # upgrade()
 } # newsletter_manager
 ?>
