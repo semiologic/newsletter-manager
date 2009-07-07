@@ -675,6 +675,7 @@ EOS;
 		foreach ( $sidebars_widgets as $sidebar => $widgets ) {
 			if ( !is_array($widgets) )
 				continue;
+			$widgets = array_map('sanitize_title', $widgets);
 			$key = array_search('newsletter', $widgets);
 			if ( $key !== false ) {
 				$sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
@@ -750,6 +751,7 @@ EOS;
 		foreach ( $sidebars_widgets as $sidebar => $widgets ) {
 			if ( !is_array($widgets) )
 				continue;
+			$widgets = array_map('sanitize_title', $widgets);
 			$key = array_search('newsletter', $widgets);
 			if ( $key !== false ) {
 				$sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
