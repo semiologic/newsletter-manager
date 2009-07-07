@@ -52,6 +52,8 @@ class newsletter_manager extends WP_Widget {
 		if ( get_option('widget_newsletter_widget') === false ) {
 			foreach ( array(
 				'newsletter_manager_widgets' => 'upgrade',
+				'sem_newsletter_manager_params' => 'upgrade_3x',
+				'sem_newsletter_params' => 'upgrade_2x',
 				) as $ops => $method ) {
 				if ( get_option($ops) !== false ) {
 					$this->alt_option_name = $ops;
@@ -386,7 +388,7 @@ EOS;
 		if ( $instance['email'] ) {
 			if ( preg_match("/@aweber\.com$/i", $instance['email']) )
 				$instance['syntax'] = 'aweber';
-			elseif ( preg_match("/@(?:getresponse|1shoppingcart)\.com$/") )
+			elseif ( preg_match("/@(?:getresponse|1shoppingcart)\.com$/", $instance['email']) )
 				$instance['syntax'] = 'list';
 			else
 				$instance['syntax'] = 'list-subscribe';
@@ -604,7 +606,6 @@ EOS;
 			? get_option('widget_contexts')
 			: false;
 		
-		unset($o['%i%']);
 		unset($ops['version']);
 		
 		foreach ( $ops as $k => $o ) {
@@ -614,6 +615,7 @@ EOS;
 				'syntax' => $o['syntax'],
 				'redirect' => $o['redirect'],
 				'teaser' => $o['captions']['widget_teaser'],
+				'thank_you' => $o['captions']['thank_you'],
 				'your_name' => $o['captions']['your_name'],
 				'your_email' => $o['captions']['your_email'],
 				'sign_up' => $o['captions']['sign_up'],
@@ -625,5 +627,156 @@ EOS;
 		
 		return $ops;
 	} # upgrade()
+	
+	
+	/**
+	 * upgrade_3x()
+	 *
+	 * @param array $ops
+	 * @return array $ops
+	 **/
+
+	function upgrade_3x($ops) {
+		if ( defined('DOING_CRON') )
+			return array();
+		
+		extract($ops, EXTR_SKIP);
+		if ( !empty($captions) )
+			extract($captions, EXTR_SKIP);
+		
+		$ops = array();
+		if ( $widget_title )
+			$ops['title'] = $widget_title;
+		$ops['email'] = $email;
+		$ops['syntax'] = $syntax;
+		$ops['thank_you'] = $thank_you;
+		$ops['your_name'] = $your_name;
+		$ops['your_email'] = $your_email;
+		$ops['sign_up'] = $sign_up;
+		$ops['redirect'] = $redirect;
+		
+		$ops = array(
+			2 => $ops,
+			3 => $ops,
+			);
+		
+		$ops[2]['teaser'] = $widget_teaser;
+		$ops[3]['teaser'] = '';
+		
+		if ( is_admin() ) {
+			$sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
+		} else {
+			global $_wp_sidebars_widgets;
+			if ( !$_wp_sidebars_widgets )
+				$_wp_sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
+			$sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
+		}
+		
+		foreach ( $sidebars_widgets as $sidebar => $widgets ) {
+			if ( !is_array($widgets) )
+				continue;
+			$key = array_search('newsletter', $widgets);
+			if ( $key !== false ) {
+				$sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
+				if ( $_wp_sidebars_widgets )
+					$_wp_sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
+				break;
+			}
+		}
+		
+		if ( !in_array('newsletter_widget-3', (array) $sidebars_widgets['inline_widgets']) ) {
+			$sidebars_widgets['inline_widgets'][] = 'newsletter_widget-3';
+			if ( $_wp_sidebars_widgets )
+				$_wp_sidebars_widgets['inline_widgets'] = 'newsletter_widget-3';
+		}
+		
+		global $wpdb;
+		
+		$wpdb->query("
+			UPDATE	$wpdb->posts
+			SET 	post_content = replace(post_content, '<!--newsletter-->', '[widget id=\"newsletter_widget-3\"/]')
+			WHERE	post_content LIKE '%<!--newsletter-->%'
+			");
+		
+		update_option('widget_newsletter_widget', $ops);
+		update_option('sidebars_widgets', $sidebars_widgets);
+		
+		return $ops;
+	} # upgrade_3x()
+	
+	
+	/**
+	 * upgrade_2x()
+	 *
+	 * @param array $ops
+	 * @return array $ops
+	 **/
+
+	function upgrade_2x($ops) {
+		if ( defined('DOING_CRON') )
+			return array();
+		
+		extract($ops, EXTR_SKIP);
+		
+		$ops = array();
+		if ( $title )
+			$ops['title'] = $title;
+		$ops['email'] = $email;
+		if ( preg_match("/@aweber\.com$/i", $ops['email']) )
+			$ops['syntax'] = 'aweber';
+		elseif ( preg_match("/@(?:getresponse|1shoppingcart)\.com$/", $ops['email']) )
+			$ops['syntax'] = 'list';
+		else
+			$ops['syntax'] = 'list-subscribe';
+		$ops['thank_you'] = $thanks;
+		
+		$ops = array(
+			2 => $ops,
+			3 => $ops,
+			);
+		
+		$ops[2]['teaser'] = $teaser;
+		$ops[3]['teaser'] = '';
+		
+		if ( is_admin() ) {
+			$sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
+		} else {
+			global $_wp_sidebars_widgets;
+			if ( !$_wp_sidebars_widgets )
+				$_wp_sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
+			$sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
+		}
+		
+		foreach ( $sidebars_widgets as $sidebar => $widgets ) {
+			if ( !is_array($widgets) )
+				continue;
+			$key = array_search('newsletter', $widgets);
+			if ( $key !== false ) {
+				$sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
+				if ( $_wp_sidebars_widgets )
+					$_wp_sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
+				break;
+			}
+		}
+		
+		if ( !in_array('newsletter_widget-3', (array) $sidebars_widgets['inline_widgets']) ) {
+			$sidebars_widgets['inline_widgets'][] = 'newsletter_widget-3';
+			if ( $_wp_sidebars_widgets )
+				$_wp_sidebars_widgets['inline_widgets'] = 'newsletter_widget-3';
+		}
+		
+		global $wpdb;
+		
+		$wpdb->query("
+			UPDATE	$wpdb->posts
+			SET 	post_content = replace(post_content, '<!--newsletter-->', '[widget id=\"newsletter_widget-3\"/]')
+			WHERE	post_content LIKE '%<!--newsletter-->%'
+			");
+		
+		update_option('widget_newsletter_widget', $ops);
+		update_option('sidebars_widgets', $sidebars_widgets);
+		
+		return $ops;
+	} # upgrade_2x()
 } # newsletter_manager
 ?>

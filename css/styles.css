@@ -3,6 +3,11 @@ form.newsletter_manager {
 	margin: 0px;
 }
 
+.newsletter_manager p {
+	margin-top: .3em;
+	margin-bottom: .3em;
+}
+
 .newsletter_block input {
 	width: 96%;
 	max-width: 250px;
