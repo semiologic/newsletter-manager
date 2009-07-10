@@ -20,7 +20,7 @@ http://www.mesoconcepts.com/license/
 **/
 
 
-load_plugin_textdomain('newsletter-manager', null, dirname(__FILE__) . '/lang');
+load_plugin_textdomain('newsletter-manager', false, dirname(plugin_basename(__FILE__)) . '/lang');
 
 if ( !defined('sem_newsletter_widget_debug') )
 	define('sem_newsletter_widget_debug', false);
