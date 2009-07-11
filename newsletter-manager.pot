@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0\n"
 "Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
-"POT-Creation-Date: 2009-07-07 23:04+0200\n"
+"POT-Creation-Date: 2009-07-11 20:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,27 +16,38 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: newsletter-manager.php:112
+#: newsletter-manager-info.php:2
+msgid "Newsletter Manager"
+msgstr ""
+
+#: newsletter-manager-info.php:3
+msgid ""
+"Lets you readily add a newsletter subscription form to your WordPress "
+"installation. Use the Inline Widgets plugin to insert newsletter "
+"subscription forms into your posts and pages."
+msgstr ""
+
+#: newsletter-manager.php:111
 msgid "A newsletter subscription form."
 msgstr ""
 
-#: newsletter-manager.php:119
+#: newsletter-manager.php:118
 msgid "Newsletter Widget"
 msgstr ""
 
-#: newsletter-manager.php:155
+#: newsletter-manager.php:154
 msgid "Your mailing list is not configured."
 msgstr ""
 
-#: newsletter-manager.php:416
+#: newsletter-manager.php:415
 msgid "Title:"
 msgstr ""
 
-#: newsletter-manager.php:428
+#: newsletter-manager.php:427
 msgid "Mailing List, e.g. <code>mylist@aweber.com</code>:"
 msgstr ""
 
-#: newsletter-manager.php:436
+#: newsletter-manager.php:435
 #, php-format
 msgid ""
 "(Works with <a href=\"%1$s\" onclick=\"window.open(this.href); return false;"
@@ -45,48 +56,48 @@ msgid ""
 "open(this.href); return false;\">1ShoppingCart</a>.)"
 msgstr ""
 
-#: newsletter-manager.php:441
+#: newsletter-manager.php:440
 msgid "Teaser Message:"
 msgstr ""
 
-#: newsletter-manager.php:453
+#: newsletter-manager.php:452
 msgid ""
 "Form Labels (<code>Your Name</code>, <code>Your Email</code>, <code>Sign Up</"
 "code>):"
 msgstr ""
 
-#: newsletter-manager.php:472
+#: newsletter-manager.php:471
 msgid "Privacy Policy:"
 msgstr ""
 
-#: newsletter-manager.php:484
+#: newsletter-manager.php:483
 msgid "Thank You Page URL, e.g. <code>http://domain.com/thank-you/</code>:"
 msgstr ""
 
-#: newsletter-manager.php:495
+#: newsletter-manager.php:494
 msgid "Thank You Message (used if no thank you page is configured):"
 msgstr ""
 
-#: newsletter-manager.php:584
+#: newsletter-manager.php:583
 msgid "Newsletter"
 msgstr ""
 
-#: newsletter-manager.php:587
+#: newsletter-manager.php:586
 msgid ""
 "Sign up to receive an occasional newsletter with insider tips and "
 "irresistible offers."
 msgstr ""
 
-#: newsletter-manager.php:589
+#: newsletter-manager.php:588
 msgid ""
 "Thank you for subscribing! You'll receive a confirmation email in a few "
 "moments."
 msgstr ""
 
-#: newsletter-manager.php:591
+#: newsletter-manager.php:590
 msgid "Your Email"
 msgstr ""
 
-#: newsletter-manager.php:592
+#: newsletter-manager.php:591
 msgid "Sign Up"
 msgstr ""

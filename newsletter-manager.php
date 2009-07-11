@@ -2,8 +2,8 @@
 /*
 Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/newsletter-manager/
-Description: Lets you readily add a newsletter subscription form to your WordPress installation.
-Version: 5.0 RC
+Description: Lets you readily add a newsletter subscription form to your WordPress installation. Use the Inline Widgets plugin to insert newsletter subscription forms into your posts and pages.
+Version: 5.0 RC2
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
 Text Domain: newsletter-manager
@@ -37,9 +37,8 @@ add_action('widgets_init', array('newsletter_manager', 'widgets_init'));
 if ( !is_admin() ) {
 	add_action('wp_print_styles', array('newsletter_manager', 'styles'), 0);
 	add_action('wp_print_scripts', array('newsletter_manager', 'scripts'), 0);
+	add_action('init', array('newsletter_manager', 'subscribe'));
 }
-
-add_action('init', array('newsletter_manager', 'subscribe'));
 
 class newsletter_manager extends WP_Widget {
 	/**
@@ -155,7 +154,7 @@ class newsletter_manager extends WP_Widget {
 				. __('Your mailing list is not configured.', 'newsletter-manager')
 				. '</div>' . "\n";
 		} elseif ( isset($_GET['subscribed']) && $_GET['subscribed'] == intval(end(explode('-', $widget_id))) ) {
-			echo apply_filters('widget_text', wpautop($thank_you));
+			echo wpautop(apply_filters('widget_text', $thank_you));
 		} else {
 			if ( $syntax == 'aweber' )
 				echo newsletter_manager::get_aweber_form($args, $instance);
@@ -200,13 +199,13 @@ EOS;
 		
 		if ( $teaser ) {
 			$teaser = '<div class="newsletter_teaser">'
-				. apply_filters('widget_text', wpautop($teaser))
+				. wpautop(apply_filters('widget_text', $teaser))
 				. '</div>';
 		}
 		
 		if ( $policy ) {
 			$policy = '<div class="newsletter_policy">'
-				. apply_filters('widget_text', wpautop($policy))
+				. wpautop(apply_filters('widget_text', $policy))
 				. '</div>';
 		}
 		
@@ -294,13 +293,13 @@ EOS;
 		
 		if ( $teaser ) {
 			$teaser = '<div class="newsletter_teaser">'
-				. apply_filters('widget_text', wpautop($teaser))
+				. wpautop(apply_filters('widget_text', $teaser))
 				. '</div>';
 		}
 		
 		if ( $policy ) {
 			$policy = '<div class="newsletter_policy">'
-				. apply_filters('widget_text', wpautop($policy))
+				. wpautop(apply_filters('widget_text', $policy))
 				. '</div>';
 		}
 		
@@ -523,7 +522,7 @@ EOS;
 		extract($ops[$num], EXTR_SKIP);
 		
 		$name = '';
-		$from = $_POST['from'];
+		$from = strip_tags(stripslashes($_POST['from']));
 		
 		if ( !is_email($email) || !is_email($from) )
 			return;
