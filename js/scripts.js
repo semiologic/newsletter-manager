@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-	jQuery("form.newsletter_manager").bind('submit', function() {
+	jQuery("form.newsletter_manager").submit(function() {
 		if ( !this.from.value.match(/^\S+@\S+\.\S+$/) ) // good enough
 			return false;
 		

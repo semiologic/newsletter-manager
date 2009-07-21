@@ -36,8 +36,9 @@ add_action('widgets_init', array('newsletter_manager', 'widgets_init'));
 
 if ( !is_admin() ) {
 	add_action('wp_print_styles', array('newsletter_manager', 'styles'), 0);
-	add_action('wp_print_scripts', array('newsletter_manager', 'scripts'), 0);
+	add_action('wp_print_scripts', array('newsletter_manager', 'scripts'), 0);	
 	add_action('init', array('newsletter_manager', 'subscribe'));
+	add_action('google_analytics', array('newsletter_manager', 'subscribed'));
 }
 
 class newsletter_manager extends WP_Widget {
@@ -246,8 +247,24 @@ EOS;
 		
 		$redirect = esc_url($redirect);
 		
+		static $event_ids = array();
+		$event_id = sanitize_title($unit);
+		
+		if ( !$event_id )
+			$event_id = $widget_id;
+		
+		if ( isset($event_ids[$event_id]) ) {
+			$i = 2;
+			while ( isset($event_ids["$event_id-$i"]) )
+				$i++;
+			$event_id = "$event_id-$i";
+		}
+		
+		$event_ids[$event_id] = true;
+		
 		return <<<EOS
-<form class="newsletter_manager" method="post" action="http://www.aweber.com/scripts/addlead.pl">
+<form class="newsletter_manager signup_event" method="post" action="http://www.aweber.com/scripts/addlead.pl">
+<input type="hidden" class="event_label" value="$event_id" />
 <input type="hidden" name="unit" value="$unit" />
 <input type="hidden" name="meta_message" value="1" />
 <input type="hidden" name="meta_required" value="from" />
@@ -335,8 +352,24 @@ EOS;
 		
 		$action = esc_url($action);
 		
+		static $event_ids = array();
+		$event_id = sanitize_title(preg_replace("/@.*/", '', $email));
+		
+		if ( !$event_id )
+			$event_id = $widget_id;
+		
+		if ( isset($event_ids[$event_id]) ) {
+			$i = 2;
+			while ( isset($event_ids["$event_id-$i"]) )
+				$i++;
+			$event_id = "$event_id-$i";
+		}
+		
+		$event_ids[$event_id] = true;
+		
 		return <<<EOS
-<form class="newsletter_manager" method="post" action="$action">
+<form class="newsletter_manager signup_event" method="post" action="$action">
+<input type="hidden" class="event_label" value="$event_id" />
 <input type="hidden" name="newsletter_widget" value="$unit" />
 $teaser
 $fields
@@ -570,6 +603,34 @@ EOS;
 		
 		die;
 	} # subscribe()
+	
+	
+	/**
+	 * subscribed()
+	 *
+	 * @return void
+	 **/
+
+	function subscribed() {
+		if ( !isset($_GET['subscribed']) )
+			return;
+		
+		$ops = get_option('widget_newsletter_widget');
+		$num = intval($_GET['subscribed']);
+		
+		if ( !$num || !isset($ops[$num]) || !is_email($ops[$num]['email']) )
+			return;
+		
+		$event_id = addslashes(sanitize_title(preg_replace("/@.*/", '', $ops[$num]['email'])));
+		
+		echo <<<EOS
+
+<script type="text/javascript">
+try { pageTracker._trackEvent(google_analyticsL10n.signup_event, google_analyticsL10n.success_event, '$event_id'); } catch (err) {}
+</script>
+
+EOS;
+	} # subscribed()
 	
 	
 	/**
