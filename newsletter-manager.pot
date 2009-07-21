@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0\n"
 "Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
-"POT-Creation-Date: 2009-07-21 20:34+0200\n"
+"POT-Creation-Date: 2009-07-21 20:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,26 +78,26 @@ msgstr ""
 msgid "Thank You Message (used if no thank you page is configured):"
 msgstr ""
 
-#: newsletter-manager.php:644
+#: newsletter-manager.php:647
 msgid "Newsletter"
 msgstr ""
 
-#: newsletter-manager.php:647
+#: newsletter-manager.php:650
 msgid ""
 "Sign up to receive an occasional newsletter with insider tips and "
 "irresistible offers."
 msgstr ""
 
-#: newsletter-manager.php:649
+#: newsletter-manager.php:652
 msgid ""
 "Thank you for subscribing! You'll receive a confirmation email in a few "
 "moments."
 msgstr ""
 
-#: newsletter-manager.php:651
+#: newsletter-manager.php:654
 msgid "Your Email"
 msgstr ""
 
-#: newsletter-manager.php:652
+#: newsletter-manager.php:655
 msgid "Sign Up"
 msgstr ""

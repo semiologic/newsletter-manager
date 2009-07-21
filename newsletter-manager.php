@@ -626,7 +626,10 @@ EOS;
 		echo <<<EOS
 
 <script type="text/javascript">
-try { pageTracker._trackEvent(google_analyticsL10n.signup_event, google_analyticsL10n.success_event, '$event_id'); } catch (err) {}
+try {
+	pageTracker._trackEvent(google_analyticsL10n.signup_event, google_analyticsL10n.success_event, '$event_id');
+	pageTracker._setVar('$event_id');
+} catch (err) {}
 </script>
 
 EOS;
