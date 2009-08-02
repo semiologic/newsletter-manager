@@ -32,15 +32,6 @@ if ( !defined('sem_newsletter_widget_debug') )
  * @package Newsletter Manager
  **/
 
-add_action('widgets_init', array('newsletter_manager', 'widgets_init'));
-
-if ( !is_admin() ) {
-	add_action('wp_print_styles', array('newsletter_manager', 'styles'), 0);
-	add_action('wp_print_scripts', array('newsletter_manager', 'scripts'), 0);	
-	add_action('init', array('newsletter_manager', 'subscribe'));
-	add_action('google_analytics', array('newsletter_manager', 'subscribed'));
-}
-
 class newsletter_manager extends WP_Widget {
 	/**
 	 * init()
@@ -844,4 +835,13 @@ EOS;
 		return $ops;
 	} # upgrade_2x()
 } # newsletter_manager
+
+add_action('widgets_init', array('newsletter_manager', 'widgets_init'));
+
+if ( !is_admin() ) {
+	add_action('wp_print_styles', array('newsletter_manager', 'styles'), 0);
+	add_action('wp_print_scripts', array('newsletter_manager', 'scripts'), 0);	
+	add_action('init', array('newsletter_manager', 'subscribe'));
+	add_action('google_analytics', array('newsletter_manager', 'subscribed'));
+}
 ?>
