@@ -720,9 +720,8 @@ EOS;
 		if ( is_admin() ) {
 			$sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
 		} else {
-			global $_wp_sidebars_widgets;
-			if ( !$_wp_sidebars_widgets )
-				$_wp_sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
+			if ( !$GLOBALS['_wp_sidebars_widgets'] )
+				$GLOBALS['_wp_sidebars_widgets'] = get_option('sidebars_widgets', array('array_version' => 3));
 			$sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
 		}
 		
@@ -733,16 +732,16 @@ EOS;
 			$key = array_search('newsletter', $widgets);
 			if ( $key !== false ) {
 				$sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
-				if ( $_wp_sidebars_widgets )
-					$_wp_sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
+				if ( $GLOBALS['_wp_sidebars_widgets'] )
+					$GLOBALS['_wp_sidebars_widgets'][$sidebar][$key] = 'newsletter_widget-2';
 				break;
 			}
 		}
 		
 		if ( !in_array('newsletter_widget-3', (array) $sidebars_widgets['inline_widgets']) ) {
 			$sidebars_widgets['inline_widgets'][] = 'newsletter_widget-3';
-			if ( $_wp_sidebars_widgets )
-				$_wp_sidebars_widgets['inline_widgets'] = 'newsletter_widget-3';
+			if ( $GLOBALS['_wp_sidebars_widgets'] )
+				$GLOBALS['_wp_sidebars_widgets']['inline_widgets'] = 'newsletter_widget-3';
 		}
 		
 		global $wpdb;
@@ -796,9 +795,8 @@ EOS;
 		if ( is_admin() ) {
 			$sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
 		} else {
-			global $_wp_sidebars_widgets;
-			if ( !$_wp_sidebars_widgets )
-				$_wp_sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
+			if ( !$GLOBALS['_wp_sidebars_widgets'] )
+				$GLOBALS['_wp_sidebars_widgets'] = get_option('sidebars_widgets', array('array_version' => 3));
 			$sidebars_widgets = get_option('sidebars_widgets', array('array_version' => 3));
 		}
 		
@@ -809,16 +807,16 @@ EOS;
 			$key = array_search('newsletter', $widgets);
 			if ( $key !== false ) {
 				$sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
-				if ( $_wp_sidebars_widgets )
-					$_wp_sidebars_widgets[$sidebar][$key] = 'newsletter_widget-2';
+				if ( $GLOBALS['_wp_sidebars_widgets'] )
+					$GLOBALS['_wp_sidebars_widgets'][$sidebar][$key] = 'newsletter_widget-2';
 				break;
 			}
 		}
 		
 		if ( !in_array('newsletter_widget-3', (array) $sidebars_widgets['inline_widgets']) ) {
 			$sidebars_widgets['inline_widgets'][] = 'newsletter_widget-3';
-			if ( $_wp_sidebars_widgets )
-				$_wp_sidebars_widgets['inline_widgets'] = 'newsletter_widget-3';
+			if ( $GLOBALS['_wp_sidebars_widgets'] )
+				$GLOBALS['_wp_sidebars_widgets']['inline_widgets'] = 'newsletter_widget-3';
 		}
 		
 		global $wpdb;
