@@ -3,7 +3,7 @@
 Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/newsletter-manager/
 Description: Lets you readily add a newsletter subscription form to your WordPress installation. Use the Inline Widgets plugin to insert newsletter subscription forms into your posts and pages.
-Version: 5.0 RC2
+Version: 5.0
 Author: Denis de Bernardy
 Author URI: http://www.getsemiologic.com
 Text Domain: newsletter-manager
