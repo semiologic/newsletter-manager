@@ -34,7 +34,6 @@ Common places to insert a form automatically include:
 - After your post's content ("Entry: Content" widget in the "Each Entry" panel), provided of course that your content is read to the very end.
 - After all posts ("After The Entries" panel.)
 
-
 = Embedding a subscription form in a static page =
 
 You'll frequently want a subscription form directly in the content of key pages on your site:
@@ -47,7 +46,6 @@ You'll frequently want a subscription form directly in the content of key pages 
 = Google Analytics integration =
 
 Combining this plugin with the Google Analytics (GA) plugin adds an interesting bonus. Specifically, form subscription usage gets tracked as page events. In addition, newly subscribed users are segmented automatically.
-
 
 = Help Me! =
 
