@@ -456,7 +456,7 @@ EOS;
 				. ' />'
 			. '</label>'
 			. '<br />' . "\n"
-			. sprintf(__('(Works with <a href="%1$s" onclick="window.open(this.href); return false;">AWeber</a> (recommended), <a href="%2$s" onclick="window.open(this.href); return false;">GetResponse</a> and <a href="%3$s" onclick="window.open(this.href); return false;">1ShoppingCart</a>.)', 'newsletter-manager'), 'http://go.semiologic.com/aweber', 'http://go.semiologic.com/getresponse', 'http://go.semiologic.com/1shoppingcart')
+			. sprintf(__('(Works with <a href="%1$s" target="_blank">AWeber</a> (recommended), <a href="%2$s" target="_blank">GetResponse</a> and <a href="%3$s" target="_blank">1ShoppingCart</a>.)', 'newsletter-manager'), 'http://go.semiologic.com/aweber', 'http://go.semiologic.com/getresponse', 'http://go.semiologic.com/1shoppingcart')
 			. '</p>' . "\n";
 		
 		echo '<p>'

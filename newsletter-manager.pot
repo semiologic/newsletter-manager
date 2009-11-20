@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0\n"
 "Report-Msgid-Bugs-To: https://tickets.semiologic.com\n"
-"POT-Creation-Date: 2009-09-14 19:25+0200\n"
+"POT-Creation-Date: 2009-11-20 11:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,10 +50,9 @@ msgstr ""
 #: newsletter-manager.php:459
 #, php-format
 msgid ""
-"(Works with <a href=\"%1$s\" onclick=\"window.open(this.href); return false;"
-"\">AWeber</a> (recommended), <a href=\"%2$s\" onclick=\"window.open(this."
-"href); return false;\">GetResponse</a> and <a href=\"%3$s\" onclick=\"window."
-"open(this.href); return false;\">1ShoppingCart</a>.)"
+"(Works with <a href=\"%1$s\" target=\"_blank\">AWeber</a> (recommended), <a "
+"href=\"%2$s\" target=\"_blank\">GetResponse</a> and <a href=\"%3$s\" target="
+"\"_blank\">1ShoppingCart</a>.)"
 msgstr ""
 
 #: newsletter-manager.php:464
