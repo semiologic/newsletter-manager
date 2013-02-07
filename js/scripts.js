@@ -11,8 +11,7 @@ jQuery(document).ready(function() {
 				ok = false;
 		});
 		
-		if ( !ok )
-			return false;
+		return ok;
 	});
 	
 	jQuery("form.newsletter_manager :text").focus(function() {
