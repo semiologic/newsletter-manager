@@ -3,7 +3,7 @@
 Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/newsletter-manager/
 Description: Lets you readily add a newsletter subscription form to your WordPress installation. Use the Inline Widgets plugin to insert newsletter subscription forms into your posts and pages.
-Version: 5.0.1
+Version: 5.1
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: newsletter-manager
@@ -34,6 +34,31 @@ if ( !defined('sem_newsletter_widget_debug') )
  **/
 
 class newsletter_manager extends WP_Widget {
+    /*
+     * newsletter_manager ()
+     */
+    function newsletter_manager() {
+        add_action('widgets_init', array($this, 'widgets_init'));
+
+        if ( !is_admin() ) {
+        	add_action('wp_print_styles', array($this, 'styles'), 0);
+        	add_action('wp_print_scripts', array($this, 'scripts'), 0);
+        	add_action('init', array($this, 'subscribe'));
+        	add_action('google_analytics', array($this, 'subscribed'));
+        }
+
+        $widget_ops = array(
+                'classname' => 'newsletter_widget',
+                'description' => __('A newsletter subscription form.', 'newsletter-manager'),
+                );
+        $control_ops = array(
+            'width' => 430,
+            );
+
+        $this->init();
+        $this->WP_Widget('newsletter_widget', __('Newsletter Widget', 'newsletter-manager'), $widget_ops, $control_ops);
+    } # newsletter_manager()
+
 	/**
 	 * init()
 	 *
@@ -90,27 +115,7 @@ class newsletter_manager extends WP_Widget {
 	function widgets_init() {
 		register_widget('newsletter_manager');
 	} # widgets_init()
-	
-	
-	/**
-	 * newsletter_manager()
-	 *
-	 * @return void
-	 **/
 
-	function newsletter_manager() {
-		$widget_ops = array(
-			'classname' => 'newsletter_widget',
-			'description' => __('A newsletter subscription form.', 'newsletter-manager'),
-			);
-		$control_ops = array(
-			'width' => 430,
-			);
-		
-		$this->init();
-		$this->WP_Widget('newsletter_widget', __('Newsletter Widget', 'newsletter-manager'), $widget_ops, $control_ops);
-	} # newsletter_manager()
-	
 	
 	/**
 	 * widget()
@@ -234,7 +239,9 @@ EOS;
 			} else {
 				$redirect .= '?';
 			}
-			$redirect .= 'subscribed=' . intval(end(explode('-', $widget_id)));
+            $widget_ids = explode('-', $widget_id);
+            if (!empty($widget_ids))
+			    $redirect .= 'subscribed=' . intval(end($widget_ids));
 		}
 		
 		$redirect = esc_url($redirect);
@@ -836,12 +843,6 @@ EOS;
 	} # upgrade_2x()
 } # newsletter_manager
 
-add_action('widgets_init', array('newsletter_manager', 'widgets_init'));
+$newsletter_manager = new newsletter_manager();
 
-if ( !is_admin() ) {
-	add_action('wp_print_styles', array('newsletter_manager', 'styles'), 0);
-	add_action('wp_print_scripts', array('newsletter_manager', 'scripts'), 0);	
-	add_action('init', array('newsletter_manager', 'subscribe'));
-	add_action('google_analytics', array('newsletter_manager', 'subscribed'));
-}
 ?>
