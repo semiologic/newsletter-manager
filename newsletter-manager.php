@@ -3,20 +3,19 @@
 Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/newsletter-manager/
 Description: Lets you readily add a newsletter subscription form to your WordPress installation. Use the Inline Widgets plugin to insert newsletter subscription forms into your posts and pages.
-Version: 5.1
+Version: 5.1.1
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: newsletter-manager
 Domain Path: /lang
+License: Dual licensed under the MIT and GPLv2 licenses
 */
 
 /*
 Terms of use
 ------------
 
-This software is copyright Mesoconcepts (http://www.mesoconcepts.com), and is distributed under the terms of the Mesoconcepts license. In a nutshell, you may freely use it for any purpose, but may not redistribute it without written permission.
-
-http://www.mesoconcepts.com/license/
+This software is copyright Denis de Bernardy & Mike Koepke, and is distributed under the terms of the MIT and GPLv2 licenses.
 **/
 
 
@@ -37,7 +36,7 @@ class newsletter_manager extends WP_Widget {
     /*
      * newsletter_manager ()
      */
-    function newsletter_manager() {
+	public function __construct() {
         add_action('widgets_init', array($this, 'widgets_init'));
 
         if ( !is_admin() ) {
@@ -844,5 +843,3 @@ EOS;
 } # newsletter_manager
 
 $newsletter_manager = new newsletter_manager();
-
-?>
