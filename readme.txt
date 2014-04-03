@@ -60,6 +60,10 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 == Change Log ==
 
+= 5.2 =
+
+- Code refactoring
+
 = 5.1.1 =
 
 - WP 3.8 compat

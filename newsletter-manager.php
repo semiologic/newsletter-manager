@@ -3,7 +3,7 @@
 Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/newsletter-manager/
 Description: Lets you readily add a newsletter subscription form to your WordPress installation. Use the Inline Widgets plugin to insert newsletter subscription forms into your posts and pages.
-Version: 5.1.1
+Version: 5.2 dev
 Author: Denis de Bernardy & Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: newsletter-manager
@@ -19,8 +19,6 @@ This software is copyright Denis de Bernardy & Mike Koepke, and is distributed u
 **/
 
 
-load_plugin_textdomain('newsletter-manager', false, dirname(plugin_basename(__FILE__)) . '/lang');
-
 if ( !defined('sem_newsletter_widget_debug') )
 	define('sem_newsletter_widget_debug', false);
 
@@ -33,18 +31,74 @@ if ( !defined('sem_newsletter_widget_debug') )
  **/
 
 class newsletter_manager extends WP_Widget {
-    /*
-     * newsletter_manager ()
-     */
-	public function __construct() {
-        add_action('widgets_init', array($this, 'widgets_init'));
+	/**
+	 * Plugin instance.
+	 *
+	 * @see get_instance()
+	 * @type object
+	 */
+	protected static $instance = NULL;
 
-        if ( !is_admin() ) {
-        	add_action('wp_print_styles', array($this, 'styles'), 0);
-        	add_action('wp_print_scripts', array($this, 'scripts'), 0);
-        	add_action('init', array($this, 'subscribe'));
-        	add_action('google_analytics', array($this, 'subscribed'));
-        }
+	/**
+	 * URL to this plugin's directory.
+	 *
+	 * @type string
+	 */
+	public $plugin_url = '';
+
+	/**
+	 * Path to this plugin's directory.
+	 *
+	 * @type string
+	 */
+	public $plugin_path = '';
+
+	/**
+	 * Access this plugin’s working instance
+	 *
+	 * @wp-hook plugins_loaded
+	 * @return  object of this class
+	 */
+	public static function get_instance()
+	{
+		NULL === self::$instance and self::$instance = new self;
+
+		return self::$instance;
+	}
+
+
+	/**
+	 * Loads translation file.
+	 *
+	 * Accessible to other classes to load different language files (admin and
+	 * front-end for example).
+	 *
+	 * @wp-hook init
+	 * @param   string $domain
+	 * @return  void
+	 */
+	public function load_language( $domain )
+	{
+		load_plugin_textdomain(
+			$domain,
+			FALSE,
+			$this->plugin_path . 'lang'
+		);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 *
+	 */
+
+	public function __construct() {
+
+		$this->plugin_url    = plugins_url( '/', __FILE__ );
+		$this->plugin_path   = plugin_dir_path( __FILE__ );
+		$this->load_language( 'newsletter-manager' );
+
+		add_action( 'plugins_loaded', array ( $this, 'init' ) );
 
         $widget_ops = array(
                 'classname' => 'newsletter_widget',
@@ -54,7 +108,6 @@ class newsletter_manager extends WP_Widget {
             'width' => 430,
             );
 
-        $this->init();
         $this->WP_Widget('newsletter_widget', __('Newsletter Widget', 'newsletter-manager'), $widget_ops, $control_ops);
     } # newsletter_manager()
 
@@ -78,9 +131,19 @@ class newsletter_manager extends WP_Widget {
 				}
 			}
 		}
+
+		// more stuff: register actions and filters
+		add_action('widgets_init', array($this, 'widgets_init'));
+
+		if ( !is_admin() ) {
+			add_action('wp_print_styles', array($this, 'styles'), 0);
+			add_action('wp_print_scripts', array($this, 'scripts'), 0);
+			add_action('init', array($this, 'subscribe'));
+			add_action('google_analytics', array($this, 'subscribed'));
+		}
 	} # init()
-	
-	
+
+
 	/**
 	 * styles()
 	 *
@@ -842,4 +905,4 @@ EOS;
 	} # upgrade_2x()
 } # newsletter_manager
 
-$newsletter_manager = new newsletter_manager();
+$newsletter_manager = newsletter_manager::get_instance();
