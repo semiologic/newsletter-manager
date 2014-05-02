@@ -163,8 +163,8 @@ class newsletter_manager extends WP_Widget {
 	 **/
 
 	function scripts() {
-		$folder = plugin_dir_url(__FILE__);
-		wp_enqueue_script('newsletter_manager', $folder . 'js/scripts.js', array('jquery'), '20090903', true);
+		$scripts_js = ( WP_DEBUG ? 'scripts.min.js' : 'scripts.js' );
+		wp_enqueue_script('newsletter_manager', plugins_url( '/js/' . $scripts_js, __FILE__), array('jquery'), '20090903', true);
 	} # scripts()
 	
 	

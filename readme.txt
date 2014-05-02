@@ -62,6 +62,7 @@ The [Semiologic forum](http://forum.semiologic.com) is the best place to report 
 
 = 5.2 =
 
+- Use minified javascript file
 - Code refactoring
 - WP 3.9 compat
 
