@@ -2,10 +2,10 @@
 /*
 Plugin Name: Newsletter Manager
 Plugin URI: http://www.semiologic.com/software/newsletter-manager/
-Description: Lets you readily add a newsletter subscription form to your WordPress installation. Use the Inline Widgets plugin to insert newsletter subscription forms into your posts and pages.
-Version: 5.3
+Description: RETIRED - Lets you readily add a newsletter subscription form to your WordPress installation. Use the Inline Widgets plugin to insert newsletter subscription forms into your posts and pages.
+Version: 5.3.1
 Author: Denis de Bernardy & Mike Koepke
-Author URI: http://www.getsemiologic.com
+Author URI: https://www.semiologic.com
 Text Domain: newsletter-manager
 Domain Path: /lang
 License: Dual licensed under the MIT and GPLv2 licenses
@@ -19,9 +19,35 @@ This software is copyright Denis de Bernardy & Mike Koepke, and is distributed u
 **/
 
 
+/*
+ * This plugin has been retired.  No further development will occur on it.
+ * */
+
+// Disable the plugin
+
+$active_plugins = get_option('active_plugins');
+
+if ( !is_array($active_plugins) )
+{
+	$active_plugins = array();
+}
+
+foreach ( (array) $active_plugins as $key => $plugin )
+{
+	if ( $plugin == 'newsletter-manager/newsletter-manager.php' )
+	{
+		unset($active_plugins[$key]);
+		break;
+	}
+}
+
+sort($active_plugins);
+
+update_option('active_plugins', $active_plugins);
+
+
 if ( !defined('sem_newsletter_widget_debug') )
 	define('sem_newsletter_widget_debug', false);
-
 
 /**
  * newsletter_manager
@@ -108,7 +134,7 @@ class newsletter_manager extends WP_Widget {
             'width' => 430,
             );
 
-        $this->WP_Widget('newsletter_widget', __('Newsletter Widget', 'newsletter-manager'), $widget_ops, $control_ops);
+        parent::__construct('newsletter_widget', __('Newsletter Widget', 'newsletter-manager'), $widget_ops, $control_ops);
     } # newsletter_manager()
 
 	/**
