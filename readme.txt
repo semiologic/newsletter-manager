@@ -6,12 +6,13 @@ Requires at least: 2.8
 Tested up to: 4.0
 Stable tag: trunk
 
-> *This plugin has been retired.  No further development will occur on it.*
-
 A widget-driven newsletter form manager.
 
 
 == Description ==
+
+
+> *This plugin has been retired.  No further development will occur on it.*
 
 The Newsletter Manager plugin for WordPress allows you to manage newsletter subscription forms on your site.
 
